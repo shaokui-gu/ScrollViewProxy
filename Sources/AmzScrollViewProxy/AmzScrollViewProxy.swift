@@ -148,10 +148,12 @@ public struct AmzScrollViewReader<Content: View>: View {
                 // seems this will not be called due to ScrollView/Preference issues
                 // https://stackoverflow.com/a/61765994/3019595
             }
-            .introspectScrollView {
-                if self.proxy.coordinator.scrollView != $0 {
-                    self.proxy.coordinator.scrollView = $0
-                    self.proxy.offset = $0.offsetPublisher
+            .introspectScrollView { view in
+                if view.isMember(of: UIScrollView.classForCoder()) {
+                    if self.proxy.coordinator.scrollView != view {
+                        self.proxy.coordinator.scrollView = view
+                        self.proxy.offset = view.offsetPublisher
+                    }
                 }
             }
     }
